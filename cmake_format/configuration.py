@@ -79,7 +79,8 @@ class Configuration(ConfigObject):
                max_subargs_per_line=3,
                separate_ctrl_name_with_space=False,
                separate_fn_name_with_space=False,
-               dangle_parens=False,
+               dangle_parens='never',
+               dangle_parens_alignment='left',
                bullet_char=None,
                enum_char=None,
                line_ending=None,
@@ -100,6 +101,7 @@ class Configuration(ConfigObject):
     self.separate_ctrl_name_with_space = separate_ctrl_name_with_space
     self.separate_fn_name_with_space = separate_fn_name_with_space
     self.dangle_parens = dangle_parens
+    self.dangle_parens_alignment = dangle_parens_alignment
 
     self.bullet_char = str(bullet_char)[0]
     if bullet_char is None:
@@ -153,6 +155,8 @@ class Configuration(ConfigObject):
 VARCHOICES = {
     'line_ending': ['windows', 'unix', 'auto'],
     'command_case': ['lower', 'upper', 'unchanged'],
+    'dangle_parens': ['never', 'wrapped', 'always'],
+    'dangle_parens_alignment': ['left', 'parens', 'contents'],
 }
 
 VARDOCS = {
@@ -166,8 +170,11 @@ VARDOCS = {
     "separate_fn_name_with_space":
     "If true, separate function names from parentheses with a space",
     "dangle_parens":
-    "If a statement is wrapped to more than one line, than dangle the closing"
-    " parenthesis on its own line",
+    "Put the end parenthesis on the next line either never, or when a"
+    " statement is wrapped to more than one line, or always",
+    "dangle_parens_alignment":
+    "When dangling parentheses, whether they should they be left-aligned, or"
+    " aligned with the open paren, or with the contents of the command",
     "bullet_char":
     "What character to use for bulleted lists",
     "enum_char":

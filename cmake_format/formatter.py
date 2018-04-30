@@ -423,7 +423,8 @@ def format_command(config, command, line_width):
       for line in lines_a[1:]:
         lines.append(indent_str + line)
 
-    if chosen is lines_b and config.dangle_parens:
+    if (chosen is lines_b and config.dangle_parens == 'wrapped') \
+       or config.dangle_parens == 'always':
       # If we're configured to dangle newlines but there's one line worth of
       # stuff then don't dangle
       if (len(lines) == 1 and len(lines[-1]) < line_width
@@ -431,7 +432,21 @@ def format_command(config, command, line_width):
               and not command.body[-1].comments):
         lines[-1] += u')'
       else:
-        lines.append(u')')
+        if config.dangle_parens_alignment == 'left':
+          indent_str = u''
+        else:
+          if chosen is lines_b:
+            # If we're using lines_b, then using 'parens' doesn't make sense
+            # because the end parenthesis would be indented past the contents
+            # of the command. Instead fall back to matching the indent of the
+            # contents, which in this case is just the tab size.
+            indent_str = u' ' * config.tab_size
+          else:
+            if config.dangle_parens_alignment == 'parens':
+              indent_str = u' ' * (len(command_start) - 1)
+            elif config.dangle_parens_alignment == 'contents':
+              indent_str = u' ' * (len(command_start))
+        lines.append(indent_str + u')')
     else:
       if len(lines[-1]) < line_width and not command.body[-1].comments:
         lines[-1] += u')'
