@@ -121,6 +121,7 @@ class Configuration(ConfigObject):
 
     self.additional_commands = get_default(additional_commands, {
         'foo': {
+            'always_wrap': False,
             'flags': ['BAR', 'BAZ'],
             'kwargs': {
                 'HEADERS': '*',
